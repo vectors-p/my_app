@@ -1,0 +1,27 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'weather_model.freezed.dart';
+part 'weather_model.g.dart';
+
+@freezed
+abstract class WeatherModel with _$WeatherModel {
+  const factory WeatherModel({
+    required String city,
+    required String country,
+    required double temperature,
+    required double feelsLike,
+    required double tempMin,
+    required double tempMax,
+    required String description,
+    required String icon, // e.g. "04d" or "04n"
+    required int humidity,
+    required double windSpeed,
+    required int pressure,
+    required int visibility,
+    required int sunrise,
+    required int sunset,
+  }) = _WeatherModel;
+
+  factory WeatherModel.fromJson(Map<String, dynamic> json) =>
+      _$WeatherModelFromJson(json);
+}

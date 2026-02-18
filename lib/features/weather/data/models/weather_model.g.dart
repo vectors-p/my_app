@@ -1,0 +1,43 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'weather_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_WeatherModel _$WeatherModelFromJson(Map<String, dynamic> json) =>
+    _WeatherModel(
+      city: json['city'] as String,
+      country: json['country'] as String,
+      temperature: (json['temperature'] as num).toDouble(),
+      feelsLike: (json['feelsLike'] as num).toDouble(),
+      tempMin: (json['tempMin'] as num).toDouble(),
+      tempMax: (json['tempMax'] as num).toDouble(),
+      description: json['description'] as String,
+      icon: json['icon'] as String,
+      humidity: (json['humidity'] as num).toInt(),
+      windSpeed: (json['windSpeed'] as num).toDouble(),
+      pressure: (json['pressure'] as num).toInt(),
+      visibility: (json['visibility'] as num).toInt(),
+      sunrise: (json['sunrise'] as num).toInt(),
+      sunset: (json['sunset'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$WeatherModelToJson(_WeatherModel instance) =>
+    <String, dynamic>{
+      'city': instance.city,
+      'country': instance.country,
+      'temperature': instance.temperature,
+      'feelsLike': instance.feelsLike,
+      'tempMin': instance.tempMin,
+      'tempMax': instance.tempMax,
+      'description': instance.description,
+      'icon': instance.icon,
+      'humidity': instance.humidity,
+      'windSpeed': instance.windSpeed,
+      'pressure': instance.pressure,
+      'visibility': instance.visibility,
+      'sunrise': instance.sunrise,
+      'sunset': instance.sunset,
+    };
