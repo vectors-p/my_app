@@ -35,7 +35,7 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 // Back button
                 GestureDetector(
-                  onTap: () => context.go('/'),
+                  onTap: () => context.pop(),
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(

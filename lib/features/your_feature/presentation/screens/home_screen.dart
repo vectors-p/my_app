@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
+import 'package:my_app/features/weather/presentation/providers/city_suggestions_provider.dart';
 import 'package:my_app/shared/widgets/app_button.dart';
 import 'package:my_app/shared/widgets/app_text_field.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -16,6 +17,15 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _controller = TextEditingController();
+  String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() => _query = _controller.text.trim());
+    });
+  }
 
   @override
   void dispose() {
@@ -25,14 +35,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _search() {
     final city = _controller.text.trim();
-    if (city.isNotEmpty) context.go('/weather/$city');
+    if (city.isNotEmpty) {
+      setState(() => _query = '');
+      _controller.clear();
+      context.push('/weather/$city');
+    }
+  }
+
+  void _selectSuggestion(String suggestion) {
+    // Extract just the city name (before first comma)
+    final city = suggestion.split(',').first.trim();
+    setState(() => _query = '');
+    _controller.clear();
+    context.push('/weather/$city');
   }
 
   @override
   Widget build(BuildContext context) {
     final historyAsync = ref.watch(searchHistoryProvider);
+    final showSuggestions = _query.length >= 2;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -52,12 +76,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 64),
-                // Settings button top right
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GestureDetector(
-                      onTap: () => context.go('/settings'),
+                      onTap: () => context.push('/settings'),
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -129,33 +152,129 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   hint: 'City name...',
                   onSubmitted: _search,
                 ),
-                const SizedBox(height: 16),
-                AppButton(label: 'Search', onTap: _search),
-                const Spacer(),
-                historyAsync.when(
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, _) => const SizedBox.shrink(),
-                  data: (history) => _CityChips(
-                    cities: history.isEmpty
-                        ? ['London', 'Tokyo', 'New York', 'Dubai', 'Paris']
-                        : history,
-                    label: history.isEmpty
-                        ? 'POPULAR CITIES'
-                        : 'RECENT SEARCHES',
-                    onCityTap: (city) => context.go('/weather/$city'),
-                    onRemoveTap: history.isEmpty
-                        ? null
-                        : (city) => ref
-                              .read(searchHistoryProvider.notifier)
-                              .remove(city),
+                // Suggestions dropdown
+                if (showSuggestions)
+                  _SuggestionsDropdown(
+                    query: _query,
+                    onSelect: _selectSuggestion,
                   ),
-                ),
+                if (!showSuggestions) ...[
+                  const SizedBox(height: 16),
+                  AppButton(label: 'Search', onTap: _search),
+                ],
+                const Spacer(),
+                if (!showSuggestions)
+                  historyAsync.when(
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
+                    data: (history) => _CityChips(
+                      cities: history.isEmpty
+                          ? ['London', 'Tokyo', 'New York', 'Dubai', 'Paris']
+                          : history,
+                      label: history.isEmpty
+                          ? 'POPULAR CITIES'
+                          : 'RECENT SEARCHES',
+                      onCityTap: (city) => context.push('/weather/$city'),
+                      onRemoveTap: history.isEmpty
+                          ? null
+                          : (city) => ref
+                                .read(searchHistoryProvider.notifier)
+                                .remove(city),
+                    ),
+                  ),
                 const SizedBox(height: 32),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SuggestionsDropdown extends ConsumerWidget {
+  final String query;
+  final void Function(String) onSelect;
+
+  const _SuggestionsDropdown({required this.query, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final suggestionsAsync = ref.watch(citySuggestionsProvider(query));
+
+    return suggestionsAsync.when(
+      loading: () => Container(
+        margin: const EdgeInsets.only(top: 4),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0D1B3E),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        ),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: AppTheme.primaryBlue,
+            strokeWidth: 1.5,
+          ),
+        ),
+      ),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (suggestions) {
+        if (suggestions.isEmpty) return const SizedBox.shrink();
+        return Container(
+          margin: const EdgeInsets.only(top: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0D1B3E),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+          child: Column(
+            children: suggestions.asMap().entries.map((entry) {
+              final i = entry.key;
+              final suggestion = entry.value;
+              final isLast = i == suggestions.length - 1;
+              return GestureDetector(
+                onTap: () => onSelect(suggestion),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    border: isLast
+                        ? null
+                        : Border(
+                            bottom: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.06),
+                            ),
+                          ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.location_on_outlined,
+                        size: 15,
+                        color: AppTheme.primaryBlue.withValues(alpha: 0.7),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          suggestion,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 }

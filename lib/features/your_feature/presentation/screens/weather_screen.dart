@@ -72,7 +72,7 @@ class WeatherScreen extends ConsumerWidget {
                       const SizedBox(width: 12),
                       PillButton(
                         label: 'Back',
-                        onTap: () => context.go('/'),
+                        onTap: () => context.pop(),
                         color: Colors.white.withValues(alpha: 0.1),
                         textColor: Colors.white,
                       ),
@@ -129,7 +129,7 @@ class _WeatherContent extends ConsumerWidget {
             children: [
               const SizedBox(height: 16),
               GestureDetector(
-                onTap: () => context.go('/'),
+                onTap: () => context.pop(),
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
