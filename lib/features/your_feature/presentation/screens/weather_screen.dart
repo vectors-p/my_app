@@ -13,11 +13,28 @@ import '../../../../shared/widgets/stat_item.dart';
 
 class WeatherScreen extends ConsumerWidget {
   final String city;
-  const WeatherScreen({super.key, required this.city});
+  final String country;
+  final double latitude;
+  final double longitude;
+
+  const WeatherScreen({
+    super.key,
+    required this.city,
+    required this.country,
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final weatherAsync = ref.watch(weatherProvider(city));
+    final weatherAsync = ref.watch(
+      weatherProvider(
+        city: city,
+        country: country,
+        latitude: latitude,
+        longitude: longitude,
+      ),
+    );
 
     return Scaffold(
       body: weatherAsync.when(
@@ -66,7 +83,14 @@ class WeatherScreen extends ConsumerWidget {
                     children: [
                       PillButton(
                         label: 'Retry',
-                        onTap: () => ref.invalidate(weatherProvider(city)),
+                        onTap: () => ref.invalidate(
+                          weatherProvider(
+                            city: city,
+                            country: country,
+                            latitude: latitude,
+                            longitude: longitude,
+                          ),
+                        ),
                         color: AppTheme.primaryBlue,
                       ),
                       const SizedBox(width: 12),
@@ -93,7 +117,6 @@ class WeatherScreen extends ConsumerWidget {
   }
 }
 
-// Simplified to ConsumerWidget — no animation state needed
 class _WeatherContent extends ConsumerWidget {
   final WeatherModel weather;
   final List<Color> gradient;
@@ -111,6 +134,9 @@ class _WeatherContent extends ConsumerWidget {
     final temp = isCelsius
         ? weather.temperature
         : (weather.temperature * 9 / 5) + 32;
+    final feelsLike = isCelsius
+        ? weather.feelsLike
+        : (weather.feelsLike * 9 / 5) + 32;
     final unit = isCelsius ? '°C' : '°F';
 
     return Container(
@@ -148,7 +174,9 @@ class _WeatherContent extends ConsumerWidget {
               ),
               const SizedBox(height: 48),
               Text(
-                '${weather.city}, ${weather.country}',
+                weather.country.isNotEmpty
+                    ? '${weather.city}, ${weather.country}'
+                    : weather.city,
                 style: AppTheme.cityName,
               ),
               const SizedBox(height: 4),
@@ -204,8 +232,19 @@ class _WeatherContent extends ConsumerWidget {
                     ),
                     StatItem(
                       icon: Icons.air_rounded,
-                      value: '${weather.windSpeed} m/s',
+                      value: '${weather.windSpeed.toStringAsFixed(1)} m/s',
                       label: 'Wind',
+                      accent: accent,
+                    ),
+                    Container(
+                      width: 1,
+                      height: 40,
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
+                    StatItem(
+                      icon: Icons.thermostat_outlined,
+                      value: '${feelsLike.toStringAsFixed(0)}$unit',
+                      label: 'Feels like',
                       accent: accent,
                     ),
                   ],

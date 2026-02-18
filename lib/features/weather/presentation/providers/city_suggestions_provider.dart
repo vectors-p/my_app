@@ -1,12 +1,24 @@
 // lib/features/weather/presentation/providers/city_suggestions_provider.dart
 import 'dart:convert';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'city_suggestions_provider.freezed.dart';
 part 'city_suggestions_provider.g.dart';
 
+@freezed
+abstract class CitySuggestion with _$CitySuggestion {
+  const factory CitySuggestion({
+    required String displayName,
+    required String city,
+    required double latitude,
+    required double longitude,
+  }) = _CitySuggestion;
+}
+
 @riverpod
-Future<List<String>> citySuggestions(Ref ref, String query) async {
+Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
   if (query.trim().length < 2) return [];
 
   final uri = Uri.parse(
@@ -24,7 +36,15 @@ Future<List<String>> citySuggestions(Ref ref, String query) async {
       final name = r['name'] as String;
       final country = r['country'] as String? ?? '';
       final admin = r['admin1'] as String?;
-      return admin != null ? '$name, $admin, $country' : '$name, $country';
+      final displayName = admin != null
+          ? '$name, $admin, $country'
+          : '$name, $country';
+      return CitySuggestion(
+        displayName: displayName,
+        city: name,
+        latitude: (r['latitude'] as num).toDouble(),
+        longitude: (r['longitude'] as num).toDouble(),
+      );
     }).toList();
   }
 

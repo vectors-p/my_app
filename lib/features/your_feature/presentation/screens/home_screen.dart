@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
 import 'package:my_app/features/weather/presentation/providers/city_suggestions_provider.dart';
+import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
 import 'package:my_app/shared/widgets/app_button.dart';
 import 'package:my_app/shared/widgets/app_text_field.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -33,21 +33,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
-  void _search() {
-    final city = _controller.text.trim();
-    if (city.isNotEmpty) {
-      setState(() => _query = '');
-      _controller.clear();
-      context.push('/weather/$city');
-    }
-  }
-
-  void _selectSuggestion(String suggestion) {
-    // Extract just the city name (before first comma)
-    final city = suggestion.split(',').first.trim();
+  void _selectSuggestion(CitySuggestion suggestion) {
     setState(() => _query = '');
     _controller.clear();
-    context.push('/weather/$city');
+    context.push(
+      '/weather',
+      extra: {
+        'city': suggestion.city,
+        'country': '',
+        'latitude': suggestion.latitude,
+        'longitude': suggestion.longitude,
+      },
+    );
   }
 
   @override
@@ -150,9 +147,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 AppTextField(
                   controller: _controller,
                   hint: 'City name...',
-                  onSubmitted: _search,
+                  onSubmitted: () {},
                 ),
-                // Suggestions dropdown
                 if (showSuggestions)
                   _SuggestionsDropdown(
                     query: _query,
@@ -160,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 if (!showSuggestions) ...[
                   const SizedBox(height: 16),
-                  AppButton(label: 'Search', onTap: _search),
+                  AppButton(label: 'Search', onTap: () {}),
                 ],
                 const Spacer(),
                 if (!showSuggestions)
@@ -174,7 +170,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       label: history.isEmpty
                           ? 'POPULAR CITIES'
                           : 'RECENT SEARCHES',
-                      onCityTap: (city) => context.push('/weather/$city'),
+                      onCityTap: (city) async {
+                        // Geocode history city before navigating
+                        final suggestions = await ref.read(
+                          citySuggestionsProvider(city).future,
+                        );
+                        if (suggestions.isNotEmpty && context.mounted) {
+                          _selectSuggestion(suggestions.first);
+                        }
+                      },
                       onRemoveTap: history.isEmpty
                           ? null
                           : (city) => ref
@@ -194,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class _SuggestionsDropdown extends ConsumerWidget {
   final String query;
-  final void Function(String) onSelect;
+  final void Function(CitySuggestion) onSelect;
 
   const _SuggestionsDropdown({required this.query, required this.onSelect});
 
@@ -260,7 +264,7 @@ class _SuggestionsDropdown extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          suggestion,
+                          suggestion.displayName,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 14,

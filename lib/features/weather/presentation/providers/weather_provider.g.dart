@@ -22,7 +22,8 @@ final class WeatherProvider
     with $FutureModifier<WeatherModel>, $FutureProvider<WeatherModel> {
   WeatherProvider._({
     required WeatherFamily super.from,
-    required String super.argument,
+    required ({String city, String country, double latitude, double longitude})
+    super.argument,
   }) : super(
          retry: null,
          name: r'weatherProvider',
@@ -38,7 +39,7 @@ final class WeatherProvider
   String toString() {
     return r'weatherProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -49,8 +50,21 @@ final class WeatherProvider
 
   @override
   FutureOr<WeatherModel> create(Ref ref) {
-    final argument = this.argument as String;
-    return weather(ref, argument);
+    final argument =
+        this.argument
+            as ({
+              String city,
+              String country,
+              double latitude,
+              double longitude,
+            });
+    return weather(
+      ref,
+      city: argument.city,
+      country: argument.country,
+      latitude: argument.latitude,
+      longitude: argument.longitude,
+    );
   }
 
   @override
@@ -64,10 +78,14 @@ final class WeatherProvider
   }
 }
 
-String _$weatherHash() => r'0d1f2aa5a3f828e7275509dfed348533b921e95e';
+String _$weatherHash() => r'8b830dea045684df846f5c89abb4c8102d6457d4';
 
 final class WeatherFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<WeatherModel>, String> {
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<WeatherModel>,
+          ({String city, String country, double latitude, double longitude})
+        > {
   WeatherFamily._()
     : super(
         retry: null,
@@ -77,8 +95,20 @@ final class WeatherFamily extends $Family
         isAutoDispose: true,
       );
 
-  WeatherProvider call(String city) =>
-      WeatherProvider._(argument: city, from: this);
+  WeatherProvider call({
+    required String city,
+    required String country,
+    required double latitude,
+    required double longitude,
+  }) => WeatherProvider._(
+    argument: (
+      city: city,
+      country: country,
+      latitude: latitude,
+      longitude: longitude,
+    ),
+    from: this,
+  );
 
   @override
   String toString() => r'weatherProvider';

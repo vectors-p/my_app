@@ -1,3 +1,4 @@
+// lib/features/weather/data/models/weather_model.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'weather_model.freezed.dart';
@@ -13,13 +14,11 @@ abstract class WeatherModel with _$WeatherModel {
     required double tempMin,
     required double tempMax,
     required String description,
-    required String icon, // e.g. "04d" or "04n"
+    required String icon, // we'll map WMO code → icon string
     required int humidity,
     required double windSpeed,
     required int pressure,
-    required int visibility,
-    required int sunrise,
-    required int sunset,
+    required bool isDay,
   }) = _WeatherModel;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) =>

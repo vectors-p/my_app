@@ -19,9 +19,7 @@ _WeatherModel _$WeatherModelFromJson(Map<String, dynamic> json) =>
       humidity: (json['humidity'] as num).toInt(),
       windSpeed: (json['windSpeed'] as num).toDouble(),
       pressure: (json['pressure'] as num).toInt(),
-      visibility: (json['visibility'] as num).toInt(),
-      sunrise: (json['sunrise'] as num).toInt(),
-      sunset: (json['sunset'] as num).toInt(),
+      isDay: json['isDay'] as bool,
     );
 
 Map<String, dynamic> _$WeatherModelToJson(_WeatherModel instance) =>
@@ -37,7 +35,5 @@ Map<String, dynamic> _$WeatherModelToJson(_WeatherModel instance) =>
       'humidity': instance.humidity,
       'windSpeed': instance.windSpeed,
       'pressure': instance.pressure,
-      'visibility': instance.visibility,
-      'sunrise': instance.sunrise,
-      'sunset': instance.sunset,
+      'isDay': instance.isDay,
     };

@@ -24,12 +24,17 @@ GoRouter appRouter(Ref ref) {
         ),
       ),
       GoRoute(
-        path: '/weather/:city',
+        path: '/weather',
         pageBuilder: (context, state) {
-          final city = state.pathParameters['city']!;
+          final extra = state.extra as Map<String, dynamic>;
           return CustomTransitionPage(
             key: state.pageKey,
-            child: WeatherScreen(city: city),
+            child: WeatherScreen(
+              city: extra['city'] as String,
+              country: extra['country'] as String,
+              latitude: extra['latitude'] as double,
+              longitude: extra['longitude'] as double,
+            ),
             transitionsBuilder: (context, animation, _, child) =>
                 FadeTransition(opacity: animation, child: child),
             transitionDuration: const Duration(milliseconds: 300),

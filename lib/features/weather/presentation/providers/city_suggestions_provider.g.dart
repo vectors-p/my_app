@@ -15,11 +15,13 @@ final citySuggestionsProvider = CitySuggestionsFamily._();
 final class CitySuggestionsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<String>>,
-          List<String>,
-          FutureOr<List<String>>
+          AsyncValue<List<CitySuggestion>>,
+          List<CitySuggestion>,
+          FutureOr<List<CitySuggestion>>
         >
-    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
+    with
+        $FutureModifier<List<CitySuggestion>>,
+        $FutureProvider<List<CitySuggestion>> {
   CitySuggestionsProvider._({
     required CitySuggestionsFamily super.from,
     required String super.argument,
@@ -43,12 +45,12 @@ final class CitySuggestionsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<String>> $createElement(
+  $FutureProviderElement<List<CitySuggestion>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<String>> create(Ref ref) {
+  FutureOr<List<CitySuggestion>> create(Ref ref) {
     final argument = this.argument as String;
     return citySuggestions(ref, argument);
   }
@@ -64,10 +66,10 @@ final class CitySuggestionsProvider
   }
 }
 
-String _$citySuggestionsHash() => r'03c43c48a9fabfdc1745b5d7110aedd7d4506613';
+String _$citySuggestionsHash() => r'9c63014eb0ec280925f537cf8dd047e078b5ed0f';
 
 final class CitySuggestionsFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
+    with $FunctionalFamilyOverride<FutureOr<List<CitySuggestion>>, String> {
   CitySuggestionsFamily._()
     : super(
         retry: null,
