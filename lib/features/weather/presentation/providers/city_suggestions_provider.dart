@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:my_app/core/constants/api_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/models/city_suggestion.dart';
 
@@ -10,7 +11,7 @@ Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
   if (query.trim().length < 2) return [];
 
   final uri = Uri.parse(
-    'https://geocoding-api.open-meteo.com/v1/search?name=$query&count=5&language=en&format=json',
+    '${ApiConstants.geocodingBaseUrl}?name=$query&count=5&language=en&format=json',
   );
 
   final response = await http.get(uri);

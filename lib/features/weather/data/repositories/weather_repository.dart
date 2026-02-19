@@ -1,6 +1,7 @@
 // lib/features/weather/data/repositories/weather_repository.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:my_app/core/constants/api_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/weather_model.dart';
 
@@ -10,8 +11,6 @@ part 'weather_repository.g.dart';
 WeatherRepository weatherRepository(Ref ref) => WeatherRepository();
 
 class WeatherRepository {
-  static const _baseUrl = 'https://api.open-meteo.com/v1/forecast';
-
   Future<WeatherModel> getWeather({
     required String city,
     required String country,
@@ -19,7 +18,7 @@ class WeatherRepository {
     required double longitude,
   }) async {
     final uri = Uri.parse(
-      '$_baseUrl?latitude=$latitude&longitude=$longitude'
+      '${ApiConstants.weatherBaseUrl}?latitude=$latitude&longitude=$longitude'
       '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
       'weather_code,surface_pressure,wind_speed_10m,is_day'
       '&daily=temperature_2m_max,temperature_2m_min'
@@ -42,8 +41,8 @@ class WeatherRepository {
         feelsLike: (current['apparent_temperature'] as num).toDouble(),
         tempMin: (daily['temperature_2m_min'][0] as num).toDouble(),
         tempMax: (daily['temperature_2m_max'][0] as num).toDouble(),
+        weatherCode: weatherCode,
         description: _descriptionFromCode(weatherCode),
-        icon: _iconFromCode(weatherCode, isDay),
         humidity: (current['relative_humidity_2m'] as num).toInt(),
         windSpeed: (current['wind_speed_10m'] as num).toDouble(),
         pressure: (current['surface_pressure'] as num).toInt(),
@@ -56,28 +55,79 @@ class WeatherRepository {
   }
 
   String _descriptionFromCode(int code) {
-    if (code == 0) return 'clear sky';
-    if (code == 1) return 'mainly clear';
-    if (code == 2) return 'partly cloudy';
-    if (code == 3) return 'overcast clouds';
-    if (code <= 49) return 'foggy';
-    if (code <= 59) return 'drizzle';
-    if (code <= 69) return 'rain';
-    if (code <= 79) return 'snow';
-    if (code <= 84) return 'rain showers';
-    if (code <= 94) return 'thunderstorm';
-    return 'thunderstorm';
-  }
+    switch (code) {
+      case 0:
+        return 'Clear sky';
 
-  String _iconFromCode(int code, bool isDay) {
-    final suffix = isDay ? 'd' : 'n';
-    if (code == 0 || code == 1) return '01$suffix'; // clear
-    if (code == 2) return '02$suffix'; // partly cloudy
-    if (code == 3) return '04$suffix'; // overcast
-    if (code <= 49) return '50$suffix'; // fog
-    if (code <= 69) return '10$suffix'; // rain
-    if (code <= 79) return '13$suffix'; // snow
-    if (code <= 84) return '09$suffix'; // showers
-    return '11$suffix'; // thunderstorm
+      case 1:
+        return 'Mainly clear';
+
+      case 2:
+        return 'Partly cloudy';
+
+      case 3:
+        return 'Overcast';
+
+      case 45:
+      case 48:
+        return 'Fog';
+
+      case 51:
+        return 'Light drizzle';
+      case 53:
+        return 'Moderate drizzle';
+      case 55:
+        return 'Dense drizzle';
+
+      case 56:
+        return 'Light freezing drizzle';
+      case 57:
+        return 'Dense freezing drizzle';
+
+      case 61:
+        return 'Slight rain';
+      case 63:
+        return 'Moderate rain';
+      case 65:
+        return 'Heavy rain';
+
+      case 66:
+        return 'Light freezing rain';
+      case 67:
+        return 'Heavy freezing rain';
+
+      case 71:
+        return 'Slight snowfall';
+      case 73:
+        return 'Moderate snowfall';
+      case 75:
+        return 'Heavy snowfall';
+
+      case 77:
+        return 'Snow grains';
+
+      case 80:
+        return 'Slight rain showers';
+      case 81:
+        return 'Moderate rain showers';
+      case 82:
+        return 'Violent rain showers';
+
+      case 85:
+        return 'Slight snow showers';
+      case 86:
+        return 'Heavy snow showers';
+
+      case 95:
+        return 'Thunderstorm';
+
+      case 96:
+        return 'Thunderstorm with slight hail';
+      case 99:
+        return 'Thunderstorm with heavy hail';
+
+      default:
+        return 'Unknown weather';
+    }
   }
 }

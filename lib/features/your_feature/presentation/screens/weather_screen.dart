@@ -109,8 +109,11 @@ class WeatherScreen extends ConsumerWidget {
         ),
         data: (weather) => _WeatherContent(
           weather: weather,
-          gradient: WeatherTheme.gradientFor(weather.description, weather.icon),
-          accent: WeatherTheme.accentFor(weather.description, weather.icon),
+          gradient: WeatherTheme.gradientFor(
+            weather.weatherCode,
+            weather.isDay,
+          ),
+          accent: WeatherTheme.accentFor(weather.weatherCode, weather.isDay),
         ),
       ),
     );
@@ -162,25 +165,26 @@ class _WeatherContent extends ConsumerWidget {
     return '$month $day, ${dateParts[0]}';
   }
 
-  IconData _iconForDescription(String description) {
-    final d = description.toLowerCase();
-    if (d.contains('clear') || d.contains('mainly clear')) {
-      return Icons.wb_sunny_rounded;
+  IconData iconFromCode(int code, bool isDay) {
+    if (code == 0 || code == 1) {
+      return isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round;
     }
-    if (d.contains('partly cloudy')) return Icons.wb_cloudy_rounded;
-    if (d.contains('overcast') || d.contains('cloud')) {
-      return Icons.cloud_rounded;
+    if (code == 2) {
+      return isDay ? Icons.cloud_circle_outlined : Icons.nights_stay_rounded;
     }
-    if (d.contains('fog')) return Icons.foggy;
-    if (d.contains('drizzle')) return Icons.grain_rounded;
-    if (d.contains('rain') || d.contains('shower')) {
-      return Icons.umbrella_rounded;
+    if (code == 3) return Icons.cloud_rounded;
+    if (code == 45 || code == 48) return Icons.foggy;
+    if (code >= 51 && code <= 59) {
+      return isDay ? Icons.grain_rounded : Icons.grain_rounded;
     }
-    if (d.contains('snow')) return Icons.ac_unit_rounded;
-    if (d.contains('thunder') || d.contains('storm')) {
-      return Icons.thunderstorm_rounded;
+    if (code >= 60 && code <= 67) {
+      return isDay ? Icons.umbrella_rounded : Icons.umbrella_rounded;
     }
-    return Icons.wb_sunny_rounded;
+    if (code >= 71 && code <= 86) return Icons.ac_unit_rounded;
+    if (code >= 95) {
+      return isDay ? Icons.thunderstorm_rounded : Icons.thunderstorm_rounded;
+    }
+    return isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round;
   }
 
   @override
@@ -292,14 +296,14 @@ class _WeatherContent extends ConsumerWidget {
                 ],
               ),
               const Spacer(),
-              // Replace Image.network with this:
               Center(
                 child: Icon(
-                  _iconForDescription(weather.description),
+                  iconFromCode(weather.weatherCode, weather.isDay),
                   size: 120,
                   color: accent.withValues(alpha: 0.9),
                 ),
               ),
+
               const Spacer(),
               GlassCard(
                 child: Row(

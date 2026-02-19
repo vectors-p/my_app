@@ -14,7 +14,7 @@ abstract class WeatherModel with _$WeatherModel {
     required double tempMin,
     required double tempMax,
     required String description,
-    required String icon, // we'll map WMO code → icon string
+    required int weatherCode,
     required int humidity,
     required double windSpeed,
     required int pressure,
