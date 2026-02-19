@@ -1,21 +1,9 @@
-// lib/features/weather/presentation/providers/city_suggestions_provider.dart
 import 'dart:convert';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../data/models/city_suggestion.dart';
 
-part 'city_suggestions_provider.freezed.dart';
 part 'city_suggestions_provider.g.dart';
-
-@freezed
-abstract class CitySuggestion with _$CitySuggestion {
-  const factory CitySuggestion({
-    required String displayName,
-    required String city,
-    required double latitude,
-    required double longitude,
-  }) = _CitySuggestion;
-}
 
 @riverpod
 Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
@@ -47,6 +35,5 @@ Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
       );
     }).toList();
   }
-
   return [];
 }

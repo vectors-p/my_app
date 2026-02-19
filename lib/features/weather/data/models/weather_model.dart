@@ -19,6 +19,7 @@ abstract class WeatherModel with _$WeatherModel {
     required double windSpeed,
     required int pressure,
     required bool isDay,
+    required String time,
   }) = _WeatherModel;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) =>

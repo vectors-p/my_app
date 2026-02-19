@@ -128,6 +128,61 @@ class _WeatherContent extends ConsumerWidget {
     required this.accent,
   });
 
+  String _formatTime(String isoTime) {
+    final parts = isoTime.split('T');
+    if (parts.length < 2) return '';
+    final timeParts = parts[1].split(':');
+    final hour = int.parse(timeParts[0]);
+    final minute = timeParts[1];
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final displayHour = hour % 12 == 0 ? 12 : hour % 12;
+    return '$displayHour:$minute $period';
+  }
+
+  String _formatDate(String isoTime) {
+    final parts = isoTime.split('T');
+    if (parts.isEmpty) return '';
+    final dateParts = parts[0].split('-');
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final month = months[int.parse(dateParts[1]) - 1];
+    final day = int.parse(dateParts[2]);
+    return '$month $day, ${dateParts[0]}';
+  }
+
+  IconData _iconForDescription(String description) {
+    final d = description.toLowerCase();
+    if (d.contains('clear') || d.contains('mainly clear')) {
+      return Icons.wb_sunny_rounded;
+    }
+    if (d.contains('partly cloudy')) return Icons.wb_cloudy_rounded;
+    if (d.contains('overcast') || d.contains('cloud')) {
+      return Icons.cloud_rounded;
+    }
+    if (d.contains('fog')) return Icons.foggy;
+    if (d.contains('drizzle')) return Icons.grain_rounded;
+    if (d.contains('rain') || d.contains('shower')) {
+      return Icons.umbrella_rounded;
+    }
+    if (d.contains('snow')) return Icons.ac_unit_rounded;
+    if (d.contains('thunder') || d.contains('storm')) {
+      return Icons.thunderstorm_rounded;
+    }
+    return Icons.wb_sunny_rounded;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isCelsius = ref.watch(settingsProvider).value ?? true;
@@ -154,23 +209,53 @@ class _WeatherContent extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () => context.pop(),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
+              // Replace the current back button with this:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Back button (left)
+                  GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.1),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.white.withValues(alpha: 0.7),
+                        size: 20,
+                      ),
                     ),
                   ),
-                  child: Icon(
-                    Icons.arrow_back_rounded,
-                    color: Colors.white.withValues(alpha: 0.7),
-                    size: 20,
+                  // Time + date (right)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        _formatTime(weather.time),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w200,
+                          letterSpacing: -1,
+                        ),
+                      ),
+                      Text(
+                        _formatDate(weather.time),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.4),
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
               const SizedBox(height: 48),
               Text(
@@ -207,11 +292,12 @@ class _WeatherContent extends ConsumerWidget {
                 ],
               ),
               const Spacer(),
+              // Replace Image.network with this:
               Center(
-                child: Image.network(
-                  'https://openweathermap.org/img/wn/${weather.icon}@4x.png',
-                  width: 120,
-                  height: 120,
+                child: Icon(
+                  _iconForDescription(weather.description),
+                  size: 120,
+                  color: accent.withValues(alpha: 0.9),
                 ),
               ),
               const Spacer(),

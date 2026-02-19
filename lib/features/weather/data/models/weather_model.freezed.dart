@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$WeatherModel {
 
  String get city; String get country; double get temperature; double get feelsLike; double get tempMin; double get tempMax; String get description; String get icon;// we'll map WMO code → icon string
- int get humidity; double get windSpeed; int get pressure; bool get isDay;
+ int get humidity; double get windSpeed; int get pressure; bool get isDay; String get time;
 /// Create a copy of WeatherModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $WeatherModelCopyWith<WeatherModel> get copyWith => _$WeatherModelCopyWithImpl<W
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherModel&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.feelsLike, feelsLike) || other.feelsLike == feelsLike)&&(identical(other.tempMin, tempMin) || other.tempMin == tempMin)&&(identical(other.tempMax, tempMax) || other.tempMax == tempMax)&&(identical(other.description, description) || other.description == description)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.windSpeed, windSpeed) || other.windSpeed == windSpeed)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.isDay, isDay) || other.isDay == isDay));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherModel&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.feelsLike, feelsLike) || other.feelsLike == feelsLike)&&(identical(other.tempMin, tempMin) || other.tempMin == tempMin)&&(identical(other.tempMax, tempMax) || other.tempMax == tempMax)&&(identical(other.description, description) || other.description == description)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.windSpeed, windSpeed) || other.windSpeed == windSpeed)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.isDay, isDay) || other.isDay == isDay)&&(identical(other.time, time) || other.time == time));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,city,country,temperature,feelsLike,tempMin,tempMax,description,icon,humidity,windSpeed,pressure,isDay);
+int get hashCode => Object.hash(runtimeType,city,country,temperature,feelsLike,tempMin,tempMax,description,icon,humidity,windSpeed,pressure,isDay,time);
 
 @override
 String toString() {
-  return 'WeatherModel(city: $city, country: $country, temperature: $temperature, feelsLike: $feelsLike, tempMin: $tempMin, tempMax: $tempMax, description: $description, icon: $icon, humidity: $humidity, windSpeed: $windSpeed, pressure: $pressure, isDay: $isDay)';
+  return 'WeatherModel(city: $city, country: $country, temperature: $temperature, feelsLike: $feelsLike, tempMin: $tempMin, tempMax: $tempMax, description: $description, icon: $icon, humidity: $humidity, windSpeed: $windSpeed, pressure: $pressure, isDay: $isDay, time: $time)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $WeatherModelCopyWith<$Res>  {
   factory $WeatherModelCopyWith(WeatherModel value, $Res Function(WeatherModel) _then) = _$WeatherModelCopyWithImpl;
 @useResult
 $Res call({
- String city, String country, double temperature, double feelsLike, double tempMin, double tempMax, String description, String icon, int humidity, double windSpeed, int pressure, bool isDay
+ String city, String country, double temperature, double feelsLike, double tempMin, double tempMax, String description, String icon, int humidity, double windSpeed, int pressure, bool isDay, String time
 });
 
 
@@ -66,7 +66,7 @@ class _$WeatherModelCopyWithImpl<$Res>
 
 /// Create a copy of WeatherModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? city = null,Object? country = null,Object? temperature = null,Object? feelsLike = null,Object? tempMin = null,Object? tempMax = null,Object? description = null,Object? icon = null,Object? humidity = null,Object? windSpeed = null,Object? pressure = null,Object? isDay = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? city = null,Object? country = null,Object? temperature = null,Object? feelsLike = null,Object? tempMin = null,Object? tempMax = null,Object? description = null,Object? icon = null,Object? humidity = null,Object? windSpeed = null,Object? pressure = null,Object? isDay = null,Object? time = null,}) {
   return _then(_self.copyWith(
 city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,8 @@ as String,humidity: null == humidity ? _self.humidity : humidity // ignore: cast
 as int,windSpeed: null == windSpeed ? _self.windSpeed : windSpeed // ignore: cast_nullable_to_non_nullable
 as double,pressure: null == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as int,isDay: null == isDay ? _self.isDay : isDay // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay,  String time)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WeatherModel() when $default != null:
-return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay);case _:
+return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay,_that.time);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay,  String time)  $default,) {final _that = this;
 switch (_that) {
 case _WeatherModel():
-return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay);case _:
+return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay,_that.time);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String city,  String country,  double temperature,  double feelsLike,  double tempMin,  double tempMax,  String description,  String icon,  int humidity,  double windSpeed,  int pressure,  bool isDay,  String time)?  $default,) {final _that = this;
 switch (_that) {
 case _WeatherModel() when $default != null:
-return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay);case _:
+return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that.tempMin,_that.tempMax,_that.description,_that.icon,_that.humidity,_that.windSpeed,_that.pressure,_that.isDay,_that.time);case _:
   return null;
 
 }
@@ -221,7 +222,7 @@ return $default(_that.city,_that.country,_that.temperature,_that.feelsLike,_that
 @JsonSerializable()
 
 class _WeatherModel implements WeatherModel {
-  const _WeatherModel({required this.city, required this.country, required this.temperature, required this.feelsLike, required this.tempMin, required this.tempMax, required this.description, required this.icon, required this.humidity, required this.windSpeed, required this.pressure, required this.isDay});
+  const _WeatherModel({required this.city, required this.country, required this.temperature, required this.feelsLike, required this.tempMin, required this.tempMax, required this.description, required this.icon, required this.humidity, required this.windSpeed, required this.pressure, required this.isDay, required this.time});
   factory _WeatherModel.fromJson(Map<String, dynamic> json) => _$WeatherModelFromJson(json);
 
 @override final  String city;
@@ -237,6 +238,7 @@ class _WeatherModel implements WeatherModel {
 @override final  double windSpeed;
 @override final  int pressure;
 @override final  bool isDay;
+@override final  String time;
 
 /// Create a copy of WeatherModel
 /// with the given fields replaced by the non-null parameter values.
@@ -251,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherModel&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.feelsLike, feelsLike) || other.feelsLike == feelsLike)&&(identical(other.tempMin, tempMin) || other.tempMin == tempMin)&&(identical(other.tempMax, tempMax) || other.tempMax == tempMax)&&(identical(other.description, description) || other.description == description)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.windSpeed, windSpeed) || other.windSpeed == windSpeed)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.isDay, isDay) || other.isDay == isDay));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherModel&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.feelsLike, feelsLike) || other.feelsLike == feelsLike)&&(identical(other.tempMin, tempMin) || other.tempMin == tempMin)&&(identical(other.tempMax, tempMax) || other.tempMax == tempMax)&&(identical(other.description, description) || other.description == description)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.windSpeed, windSpeed) || other.windSpeed == windSpeed)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.isDay, isDay) || other.isDay == isDay)&&(identical(other.time, time) || other.time == time));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,city,country,temperature,feelsLike,tempMin,tempMax,description,icon,humidity,windSpeed,pressure,isDay);
+int get hashCode => Object.hash(runtimeType,city,country,temperature,feelsLike,tempMin,tempMax,description,icon,humidity,windSpeed,pressure,isDay,time);
 
 @override
 String toString() {
-  return 'WeatherModel(city: $city, country: $country, temperature: $temperature, feelsLike: $feelsLike, tempMin: $tempMin, tempMax: $tempMax, description: $description, icon: $icon, humidity: $humidity, windSpeed: $windSpeed, pressure: $pressure, isDay: $isDay)';
+  return 'WeatherModel(city: $city, country: $country, temperature: $temperature, feelsLike: $feelsLike, tempMin: $tempMin, tempMax: $tempMax, description: $description, icon: $icon, humidity: $humidity, windSpeed: $windSpeed, pressure: $pressure, isDay: $isDay, time: $time)';
 }
 
 
@@ -271,7 +273,7 @@ abstract mixin class _$WeatherModelCopyWith<$Res> implements $WeatherModelCopyWi
   factory _$WeatherModelCopyWith(_WeatherModel value, $Res Function(_WeatherModel) _then) = __$WeatherModelCopyWithImpl;
 @override @useResult
 $Res call({
- String city, String country, double temperature, double feelsLike, double tempMin, double tempMax, String description, String icon, int humidity, double windSpeed, int pressure, bool isDay
+ String city, String country, double temperature, double feelsLike, double tempMin, double tempMax, String description, String icon, int humidity, double windSpeed, int pressure, bool isDay, String time
 });
 
 
@@ -288,7 +290,7 @@ class __$WeatherModelCopyWithImpl<$Res>
 
 /// Create a copy of WeatherModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? city = null,Object? country = null,Object? temperature = null,Object? feelsLike = null,Object? tempMin = null,Object? tempMax = null,Object? description = null,Object? icon = null,Object? humidity = null,Object? windSpeed = null,Object? pressure = null,Object? isDay = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? city = null,Object? country = null,Object? temperature = null,Object? feelsLike = null,Object? tempMin = null,Object? tempMax = null,Object? description = null,Object? icon = null,Object? humidity = null,Object? windSpeed = null,Object? pressure = null,Object? isDay = null,Object? time = null,}) {
   return _then(_WeatherModel(
 city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
@@ -302,7 +304,8 @@ as String,humidity: null == humidity ? _self.humidity : humidity // ignore: cast
 as int,windSpeed: null == windSpeed ? _self.windSpeed : windSpeed // ignore: cast_nullable_to_non_nullable
 as double,pressure: null == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as int,isDay: null == isDay ? _self.isDay : isDay // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

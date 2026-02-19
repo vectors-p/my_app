@@ -48,13 +48,13 @@ class WeatherRepository {
         windSpeed: (current['wind_speed_10m'] as num).toDouble(),
         pressure: (current['surface_pressure'] as num).toInt(),
         isDay: isDay,
+        time: current['time'] as String,
       );
     } else {
       throw Exception('Failed to fetch weather');
     }
   }
 
-  // Map WMO weather codes to human-readable descriptions
   String _descriptionFromCode(int code) {
     if (code == 0) return 'clear sky';
     if (code == 1) return 'mainly clear';
@@ -69,7 +69,6 @@ class WeatherRepository {
     return 'thunderstorm';
   }
 
-  // Map WMO codes to OpenWeatherMap-style icon codes for the existing UI
   String _iconFromCode(int code, bool isDay) {
     final suffix = isDay ? 'd' : 'n';
     if (code == 0 || code == 1) return '01$suffix'; // clear
