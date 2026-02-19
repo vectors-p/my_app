@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_app/features/weather/data/models/weather_model.dart';
 import 'package:my_app/features/weather/presentation/providers/weather_provider.dart';
 import 'package:my_app/features/weather/presentation/utils/weather_theme.dart';
@@ -165,26 +166,26 @@ class _WeatherContent extends ConsumerWidget {
     return '$month $day, ${dateParts[0]}';
   }
 
-  IconData iconFromCode(int code, bool isDay) {
+  String animationForCode(int code, bool isDay) {
     if (code == 0 || code == 1) {
-      return isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round;
+      return isDay
+          ? 'assets/animations/clear_day.json'
+          : 'assets/animations/clear_night.json';
     }
     if (code == 2) {
-      return isDay ? Icons.cloud_circle_outlined : Icons.nights_stay_rounded;
+      return isDay
+          ? 'assets/animations/partly_cloudy_day.json'
+          : 'assets/animations/partly_cloudy_night.json';
     }
-    if (code == 3) return Icons.cloud_rounded;
-    if (code == 45 || code == 48) return Icons.foggy;
-    if (code >= 51 && code <= 59) {
-      return isDay ? Icons.grain_rounded : Icons.grain_rounded;
-    }
-    if (code >= 60 && code <= 67) {
-      return isDay ? Icons.umbrella_rounded : Icons.umbrella_rounded;
-    }
-    if (code >= 71 && code <= 86) return Icons.ac_unit_rounded;
-    if (code >= 95) {
-      return isDay ? Icons.thunderstorm_rounded : Icons.thunderstorm_rounded;
-    }
-    return isDay ? Icons.wb_sunny_rounded : Icons.nightlight_round;
+    if (code == 3) return 'assets/animations/cloudy.json';
+    if (code == 45 || code == 48) return 'assets/animations/fog.json';
+    if (code >= 51 && code <= 59) return 'assets/animations/drizzle.json';
+    if (code >= 60 && code <= 67) return 'assets/animations/rain.json';
+    if (code >= 71 && code <= 86) return 'assets/animations/snow.json';
+    if (code >= 95) return 'assets/animations/thunderstorm.json';
+    return isDay
+        ? 'assets/animations/clear_day.json'
+        : 'assets/animations/clear_night.json';
   }
 
   @override
@@ -213,11 +214,9 @@ class _WeatherContent extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              // Replace the current back button with this:
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Back button (left)
                   GestureDetector(
                     onTap: () => context.pop(),
                     child: Container(
@@ -236,7 +235,6 @@ class _WeatherContent extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // Time + date (right)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -297,13 +295,13 @@ class _WeatherContent extends ConsumerWidget {
               ),
               const Spacer(),
               Center(
-                child: Icon(
-                  iconFromCode(weather.weatherCode, weather.isDay),
-                  size: 120,
-                  color: accent.withValues(alpha: 0.9),
+                child: Lottie.asset(
+                  animationForCode(weather.weatherCode, weather.isDay),
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.contain,
                 ),
               ),
-
               const Spacer(),
               GlassCard(
                 child: Row(
