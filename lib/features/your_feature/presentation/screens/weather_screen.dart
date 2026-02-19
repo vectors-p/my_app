@@ -297,8 +297,8 @@ class _WeatherContent extends ConsumerWidget {
               Center(
                 child: Lottie.asset(
                   animationForCode(weather.weatherCode, weather.isDay),
-                  width: 150,
-                  height: 150,
+                  width: 200,
+                  height: 200,
                   fit: BoxFit.contain,
                 ),
               ),

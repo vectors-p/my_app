@@ -7,6 +7,7 @@ abstract class CitySuggestion with _$CitySuggestion {
   const factory CitySuggestion({
     required String displayName,
     required String city,
+    required String country,
     required double latitude,
     required double longitude,
   }) = _CitySuggestion;

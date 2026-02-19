@@ -31,6 +31,7 @@ Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
       return CitySuggestion(
         displayName: displayName,
         city: name,
+        country: country, 
         latitude: (r['latitude'] as num).toDouble(),
         longitude: (r['longitude'] as num).toDouble(),
       );

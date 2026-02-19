@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       '/weather',
       extra: {
         'city': suggestion.city,
-        'country': '',
+        'country': suggestion.country,
         'latitude': suggestion.latitude,
         'longitude': suggestion.longitude,
       },

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CitySuggestion {
 
- String get displayName; String get city; double get latitude; double get longitude;
+ String get displayName; String get city; String get country; double get latitude; double get longitude;
 /// Create a copy of CitySuggestion
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CitySuggestionCopyWith<CitySuggestion> get copyWith => _$CitySuggestionCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CitySuggestion&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.city, city) || other.city == city)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CitySuggestion&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,city,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,displayName,city,country,latitude,longitude);
 
 @override
 String toString() {
-  return 'CitySuggestion(displayName: $displayName, city: $city, latitude: $latitude, longitude: $longitude)';
+  return 'CitySuggestion(displayName: $displayName, city: $city, country: $country, latitude: $latitude, longitude: $longitude)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CitySuggestionCopyWith<$Res>  {
   factory $CitySuggestionCopyWith(CitySuggestion value, $Res Function(CitySuggestion) _then) = _$CitySuggestionCopyWithImpl;
 @useResult
 $Res call({
- String displayName, String city, double latitude, double longitude
+ String displayName, String city, String country, double latitude, double longitude
 });
 
 
@@ -62,10 +62,11 @@ class _$CitySuggestionCopyWithImpl<$Res>
 
 /// Create a copy of CitySuggestion
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? displayName = null,Object? city = null,Object? latitude = null,Object? longitude = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? displayName = null,Object? city = null,Object? country = null,Object? latitude = null,Object? longitude = null,}) {
   return _then(_self.copyWith(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String displayName,  String city,  double latitude,  double longitude)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String displayName,  String city,  String country,  double latitude,  double longitude)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CitySuggestion() when $default != null:
-return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);case _:
+return $default(_that.displayName,_that.city,_that.country,_that.latitude,_that.longitude);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String displayName,  String city,  double latitude,  double longitude)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String displayName,  String city,  String country,  double latitude,  double longitude)  $default,) {final _that = this;
 switch (_that) {
 case _CitySuggestion():
-return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);case _:
+return $default(_that.displayName,_that.city,_that.country,_that.latitude,_that.longitude);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String displayName,  String city,  double latitude,  double longitude)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String displayName,  String city,  String country,  double latitude,  double longitude)?  $default,) {final _that = this;
 switch (_that) {
 case _CitySuggestion() when $default != null:
-return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);case _:
+return $default(_that.displayName,_that.city,_that.country,_that.latitude,_that.longitude);case _:
   return null;
 
 }
@@ -209,11 +210,12 @@ return $default(_that.displayName,_that.city,_that.latitude,_that.longitude);cas
 
 
 class _CitySuggestion implements CitySuggestion {
-  const _CitySuggestion({required this.displayName, required this.city, required this.latitude, required this.longitude});
+  const _CitySuggestion({required this.displayName, required this.city, required this.country, required this.latitude, required this.longitude});
   
 
 @override final  String displayName;
 @override final  String city;
+@override final  String country;
 @override final  double latitude;
 @override final  double longitude;
 
@@ -227,16 +229,16 @@ _$CitySuggestionCopyWith<_CitySuggestion> get copyWith => __$CitySuggestionCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CitySuggestion&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.city, city) || other.city == city)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CitySuggestion&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.city, city) || other.city == city)&&(identical(other.country, country) || other.country == country)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,displayName,city,latitude,longitude);
+int get hashCode => Object.hash(runtimeType,displayName,city,country,latitude,longitude);
 
 @override
 String toString() {
-  return 'CitySuggestion(displayName: $displayName, city: $city, latitude: $latitude, longitude: $longitude)';
+  return 'CitySuggestion(displayName: $displayName, city: $city, country: $country, latitude: $latitude, longitude: $longitude)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$CitySuggestionCopyWith<$Res> implements $CitySuggestionCo
   factory _$CitySuggestionCopyWith(_CitySuggestion value, $Res Function(_CitySuggestion) _then) = __$CitySuggestionCopyWithImpl;
 @override @useResult
 $Res call({
- String displayName, String city, double latitude, double longitude
+ String displayName, String city, String country, double latitude, double longitude
 });
 
 
@@ -264,10 +266,11 @@ class __$CitySuggestionCopyWithImpl<$Res>
 
 /// Create a copy of CitySuggestion
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? city = null,Object? latitude = null,Object? longitude = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? displayName = null,Object? city = null,Object? country = null,Object? latitude = null,Object? longitude = null,}) {
   return _then(_CitySuggestion(
 displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,
