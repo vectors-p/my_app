@@ -4,6 +4,7 @@ class AppTheme {
   AppTheme._();
 
   // Base colors
+  static const blueBg = Color(0xFF00004D);
   static const darkBg = Color(0xFF0B0F1E);
   static const darkBgSecondary = Color(0xFF0D1B3E);
   static const primaryBlue = Color(0xFF7EB8F7);

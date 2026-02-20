@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -37,84 +38,91 @@ class WeatherScreen extends ConsumerWidget {
       ),
     );
 
-    return Scaffold(
-      body: weatherAsync.when(
-        loading: () => Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppTheme.darkBg, AppTheme.darkBgSecondary],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        body: weatherAsync.when(
+          loading: () => Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppTheme.darkBg, AppTheme.darkBgSecondary],
+              ),
             ),
-          ),
-          child: const Center(
-            child: CircularProgressIndicator(
-              color: AppTheme.primaryBlue,
-              strokeWidth: 1.5,
-            ),
-          ),
-        ),
-        error: (e, _) => Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppTheme.darkBg, Color(0xFF1A0A0A)],
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(28),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.cloud_off_rounded,
-                    size: 64,
-                    color: Colors.white.withValues(alpha: 0.2),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    e.toString().replaceAll('Exception: ', ''),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      PillButton(
-                        label: 'Retry',
-                        onTap: () => ref.invalidate(
-                          weatherProvider(
-                            city: city,
-                            country: country,
-                            latitude: latitude,
-                            longitude: longitude,
-                          ),
-                        ),
-                        color: AppTheme.primaryBlue,
-                      ),
-                      const SizedBox(width: 12),
-                      PillButton(
-                        label: 'Back',
-                        onTap: () => context.pop(),
-                        color: Colors.white.withValues(alpha: 0.1),
-                        textColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.primaryBlue,
+                strokeWidth: 1.5,
               ),
             ),
           ),
-        ),
-        data: (weather) => _WeatherContent(
-          weather: weather,
-          gradient: WeatherTheme.gradientFor(
-            weather.weatherCode,
-            weather.isDay,
+          error: (e, _) => Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppTheme.darkBg, Color(0xFF1A0A0A)],
+              ),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(28),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.cloud_off_rounded,
+                      size: 64,
+                      color: Colors.white.withValues(alpha: 0.2),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      e.toString().replaceAll('Exception: ', ''),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppTheme.textSecondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PillButton(
+                          label: 'Retry',
+                          onTap: () => ref.invalidate(
+                            weatherProvider(
+                              city: city,
+                              country: country,
+                              latitude: latitude,
+                              longitude: longitude,
+                            ),
+                          ),
+                          color: AppTheme.primaryBlue,
+                        ),
+                        const SizedBox(width: 12),
+                        PillButton(
+                          label: 'Back',
+                          onTap: () => context.pop(),
+                          color: Colors.white.withValues(alpha: 0.1),
+                          textColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          accent: WeatherTheme.accentFor(weather.weatherCode, weather.isDay),
+          data: (weather) => _WeatherContent(
+            weather: weather,
+            gradient: WeatherTheme.gradientFor(
+              weather.weatherCode,
+              weather.isDay,
+            ),
+            accent: WeatherTheme.accentFor(weather.weatherCode, weather.isDay),
+          ),
         ),
       ),
     );

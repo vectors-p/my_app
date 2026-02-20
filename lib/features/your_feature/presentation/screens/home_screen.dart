@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/features/weather/data/models/city_suggestion.dart';
@@ -54,127 +55,134 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final historyAsync = ref.watch(searchHistoryProvider);
     final showSuggestions = _query.length >= 2;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.darkBg,
-              AppTheme.darkBgSecondary,
-              AppTheme.darkBg,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 64),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GlassIconButton(
-                      icon: Icons.settings_outlined,
-                      onTap: () => context.push('/settings'),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.wb_sunny_outlined,
-                    color: Color(0xFFFFD580),
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                const Text(
-                  'Weather',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                    letterSpacing: -1.5,
-                    height: 1.1,
-                  ),
-                ),
-                Text(
-                  'Forecast',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.primaryBlue,
-                    letterSpacing: -1.5,
-                    height: 1.1,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Search any city in the world',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: AppTheme.textSecondary,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.2,
-                  ),
-                ),
-                const SizedBox(height: 48),
-                AppTextField(
-                  controller: _controller,
-                  hint: 'City name...',
-                  onSubmitted: () {},
-                ),
-                if (showSuggestions)
-                  _SuggestionsDropdown(
-                    query: _query,
-                    onSelect: _selectSuggestion,
-                  ),
-                if (!showSuggestions) ...[
-                  const SizedBox(height: 16),
-                  AppButton(label: 'Search', onTap: () {}),
-                ],
-                const Spacer(),
-                if (!showSuggestions)
-                  historyAsync.when(
-                    loading: () => const SizedBox.shrink(),
-                    error: (_, _) => const SizedBox.shrink(),
-                    data: (history) => _CityChips(
-                      cities: history.isEmpty
-                          ? ['London', 'Tokyo', 'New York', 'Dubai', 'Paris']
-                          : history,
-                      label: history.isEmpty
-                          ? 'POPULAR CITIES'
-                          : 'RECENT SEARCHES',
-                      onCityTap: (city) async {
-                        final suggestions = await ref.read(
-                          citySuggestionsProvider(city).future,
-                        );
-                        if (suggestions.isNotEmpty && context.mounted) {
-                          _selectSuggestion(suggestions.first);
-                        }
-                      },
-                      onRemoveTap: history.isEmpty
-                          ? null
-                          : (city) => ref
-                                .read(searchHistoryProvider.notifier)
-                                .remove(city),
-                    ),
-                  ),
-                const SizedBox(height: 32),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppTheme.blueBg,
+                AppTheme.darkBgSecondary,
+                AppTheme.darkBg,
               ],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 64),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GlassIconButton(
+                        icon: Icons.settings_outlined,
+                        onTap: () => context.push('/settings'),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.wb_sunny_outlined,
+                      color: Color(0xFFFFD580),
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  const Text(
+                    'Weather',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                      letterSpacing: -1.5,
+                      height: 1.1,
+                    ),
+                  ),
+                  Text(
+                    'Forecast',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.primaryBlue,
+                      letterSpacing: -1.5,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Search any city in the world',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: AppTheme.textSecondary,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  AppTextField(
+                    controller: _controller,
+                    hint: 'City name...',
+                    onSubmitted: () {},
+                  ),
+                  if (showSuggestions)
+                    _SuggestionsDropdown(
+                      query: _query,
+                      onSelect: _selectSuggestion,
+                    ),
+                  if (!showSuggestions) ...[
+                    const SizedBox(height: 16),
+                    AppButton(label: 'Search', onTap: () {}),
+                  ],
+                  const Spacer(),
+                  if (!showSuggestions)
+                    historyAsync.when(
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
+                      data: (history) => _CityChips(
+                        cities: history.isEmpty
+                            ? ['London', 'Tokyo', 'New York', 'Dubai', 'Paris']
+                            : history,
+                        label: history.isEmpty
+                            ? 'POPULAR CITIES'
+                            : 'RECENT SEARCHES',
+                        onCityTap: (city) async {
+                          final suggestions = await ref.read(
+                            citySuggestionsProvider(city).future,
+                          );
+                          if (suggestions.isNotEmpty && context.mounted) {
+                            _selectSuggestion(suggestions.first);
+                          }
+                        },
+                        onRemoveTap: history.isEmpty
+                            ? null
+                            : (city) => ref
+                                  .read(searchHistoryProvider.notifier)
+                                  .remove(city),
+                      ),
+                    ),
+                  const SizedBox(height: 32),
+                ],
+              ),
             ),
           ),
         ),
