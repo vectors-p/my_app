@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/core/theme/app_theme.dart';
+import 'package:my_app/features/settings/presentation/providers/settings_provider.dart';
+import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
 import 'package:my_app/shared/widgets/glass_icon_button.dart';
 import 'package:my_app/shared/widgets/tappable_glass_card.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/providers/settings_provider.dart';
-import '../../../weather/presentation/providers/search_history_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});

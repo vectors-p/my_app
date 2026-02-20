@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/core/theme/app_theme.dart';
 import 'package:my_app/features/weather/data/models/city_suggestion.dart';
 import 'package:my_app/features/weather/presentation/providers/city_suggestions_provider.dart';
 import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
@@ -9,7 +10,6 @@ import 'package:my_app/shared/widgets/app_button.dart';
 import 'package:my_app/shared/widgets/app_text_field.dart';
 import 'package:my_app/shared/widgets/city_chip.dart';
 import 'package:my_app/shared/widgets/glass_icon_button.dart';
-import '../../../../core/theme/app_theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

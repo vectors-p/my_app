@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_app/core/theme/app_theme.dart';
+import 'package:my_app/features/settings/presentation/providers/settings_provider.dart';
 import 'package:my_app/features/weather/data/models/weather_model.dart';
 import 'package:my_app/features/weather/presentation/providers/weather_provider.dart';
 import 'package:my_app/features/weather/presentation/utils/weather_theme.dart';
+import 'package:my_app/shared/widgets/glass_card.dart';
 import 'package:my_app/shared/widgets/glass_icon_button.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/providers/settings_provider.dart';
-import '../../../../shared/widgets/glass_card.dart';
-import '../../../../shared/widgets/pill_button.dart';
-import '../../../../shared/widgets/stat_item.dart';
+import 'package:my_app/shared/widgets/pill_button.dart';
+import 'package:my_app/shared/widgets/stat_item.dart';
 
 class WeatherScreen extends ConsumerWidget {
   final String city;
