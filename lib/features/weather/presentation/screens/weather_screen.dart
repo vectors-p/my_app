@@ -37,6 +37,7 @@ class WeatherScreen extends ConsumerWidget {
         longitude: longitude,
       ),
     );
+    final isCelsius = ref.watch(settingsProvider).value ?? true;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -122,6 +123,7 @@ class WeatherScreen extends ConsumerWidget {
               weather.isDay,
             ),
             accent: WeatherTheme.accentFor(weather.weatherCode, weather.isDay),
+            isCelsius: isCelsius,
           ),
         ),
       ),
@@ -129,15 +131,17 @@ class WeatherScreen extends ConsumerWidget {
   }
 }
 
-class _WeatherContent extends ConsumerWidget {
+class _WeatherContent extends StatelessWidget {
   final WeatherModel weather;
   final List<Color> gradient;
   final Color accent;
+  final bool isCelsius;
 
   const _WeatherContent({
     required this.weather,
     required this.gradient,
     required this.accent,
+    required this.isCelsius,
   });
 
   String _formatTime(String isoTime) {
@@ -197,8 +201,7 @@ class _WeatherContent extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isCelsius = ref.watch(settingsProvider).value ?? true;
+  Widget build(BuildContext context) {
     final temp = isCelsius
         ? weather.temperature
         : (weather.temperature * 9 / 5) + 32;
