@@ -1,4 +1,3 @@
-// lib/features/weather/data/models/weather_model.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'weather_model.freezed.dart';

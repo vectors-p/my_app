@@ -1,4 +1,3 @@
-// lib/shared/widgets/tappable_glass_card.dart
 import 'package:flutter/material.dart';
 
 class TappableGlassCard extends StatefulWidget {

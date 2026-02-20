@@ -1,4 +1,3 @@
-// lib/shared/widgets/app_button.dart
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 

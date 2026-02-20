@@ -1,4 +1,3 @@
-// lib/core/providers/settings_provider.dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +9,6 @@ class Settings extends _$Settings {
 
   @override
   Future<bool> build() async {
-    // true = Celsius, false = Fahrenheit
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_unitKey) ?? true;
   }

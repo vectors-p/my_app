@@ -1,4 +1,3 @@
-// lib/features/weather/presentation/providers/weather_provider.dart
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/models/weather_model.dart';
 import '../../data/repositories/weather_repository.dart';

@@ -1,4 +1,3 @@
-// lib/features/weather/presentation/utils/weather_theme.dart
 import 'package:flutter/material.dart';
 
 class WeatherTheme {

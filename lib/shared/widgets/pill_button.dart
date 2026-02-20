@@ -1,4 +1,3 @@
-// lib/shared/widgets/pill_button.dart
 import 'package:flutter/material.dart';
 
 class PillButton extends StatelessWidget {

@@ -1,4 +1,3 @@
-// lib/shared/widgets/city_chip.dart
 import 'package:flutter/material.dart';
 
 class CityChip extends StatefulWidget {
