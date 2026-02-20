@@ -7,6 +7,8 @@ import 'package:my_app/features/weather/presentation/providers/city_suggestions_
 import 'package:my_app/features/weather/presentation/providers/search_history_provider.dart';
 import 'package:my_app/shared/widgets/app_button.dart';
 import 'package:my_app/shared/widgets/app_text_field.dart';
+import 'package:my_app/shared/widgets/city_chip.dart';
+import 'package:my_app/shared/widgets/glass_icon_button.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -77,23 +79,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    GestureDetector(
+                    GlassIconButton(
+                      icon: Icons.settings_outlined,
                       onTap: () => context.push('/settings'),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.settings_outlined,
-                          color: Colors.white.withValues(alpha: 0.7),
-                          size: 20,
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -172,7 +160,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ? 'POPULAR CITIES'
                           : 'RECENT SEARCHES',
                       onCityTap: (city) async {
-                        // Geocode history city before navigating
                         final suggestions = await ref.read(
                           citySuggestionsProvider(city).future,
                         );
@@ -237,49 +224,82 @@ class _SuggestionsDropdown extends ConsumerWidget {
             children: suggestions.asMap().entries.map((entry) {
               final i = entry.key;
               final suggestion = entry.value;
-              final isLast = i == suggestions.length - 1;
-              return GestureDetector(
+              return _SuggestionItem(
+                suggestion: suggestion,
                 onTap: () => onSelect(suggestion),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    border: isLast
-                        ? null
-                        : Border(
-                            bottom: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.06),
-                            ),
-                          ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        size: 15,
-                        color: AppTheme.primaryBlue.withValues(alpha: 0.7),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          suggestion.displayName,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                isLast: i == suggestions.length - 1,
               );
             }).toList(),
           ),
         );
       },
+    );
+  }
+}
+
+class _SuggestionItem extends StatefulWidget {
+  final CitySuggestion suggestion;
+  final VoidCallback onTap;
+  final bool isLast;
+
+  const _SuggestionItem({
+    required this.suggestion,
+    required this.onTap,
+    required this.isLast,
+  });
+
+  @override
+  State<_SuggestionItem> createState() => _SuggestionItemState();
+}
+
+class _SuggestionItemState extends State<_SuggestionItem> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        decoration: BoxDecoration(
+          color: _pressed
+              ? Colors.white.withValues(alpha: 0.08)
+              : Colors.transparent,
+          border: widget.isLast
+              ? null
+              : Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.06),
+                  ),
+                ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.location_on_outlined,
+              size: 15,
+              color: AppTheme.primaryBlue.withValues(
+                alpha: _pressed ? 1.0 : 0.7,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                widget.suggestion.displayName,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: _pressed ? 1.0 : 0.8),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -315,47 +335,17 @@ class _CityChips extends StatelessWidget {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: cities.map((city) {
-            return GestureDetector(
-              onTap: () => onCityTap(city),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 8,
+          children: cities
+              .map(
+                (city) => CityChip(
+                  city: city,
+                  onTap: () => onCityTap(city),
+                  onRemove: onRemoveTap != null
+                      ? () => onRemoveTap!(city)
+                      : null,
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      city,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 13,
-                      ),
-                    ),
-                    if (onRemoveTap != null) ...[
-                      const SizedBox(width: 6),
-                      GestureDetector(
-                        onTap: () => onRemoveTap!(city),
-                        child: Icon(
-                          Icons.close_rounded,
-                          size: 13,
-                          color: Colors.white.withValues(alpha: 0.3),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+              )
+              .toList(),
         ),
       ],
     );

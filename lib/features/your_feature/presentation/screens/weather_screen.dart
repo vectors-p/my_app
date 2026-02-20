@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:my_app/features/weather/data/models/weather_model.dart';
 import 'package:my_app/features/weather/presentation/providers/weather_provider.dart';
 import 'package:my_app/features/weather/presentation/utils/weather_theme.dart';
+import 'package:my_app/shared/widgets/glass_icon_button.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/providers/settings_provider.dart';
 import '../../../../shared/widgets/glass_card.dart';
@@ -217,23 +218,9 @@ class _WeatherContent extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
+                  GlassIconButton(
+                    icon: Icons.arrow_back_rounded,
                     onTap: () => context.pop(),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.arrow_back_rounded,
-                        color: Colors.white.withValues(alpha: 0.7),
-                        size: 20,
-                      ),
-                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
