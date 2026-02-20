@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/features/settings/presentation/screens/settings_screen.dart';
-import 'package:my_app/features/your_feature/presentation/screens/home_screen.dart';
-import 'package:my_app/features/your_feature/presentation/screens/weather_screen.dart';
+import 'package:my_app/features/weather/presentation/screens/home_screen.dart';
+import 'package:my_app/features/weather/presentation/screens/weather_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
