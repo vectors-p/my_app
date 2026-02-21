@@ -23,7 +23,7 @@ Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
 
     return results.map((r) {
       final name = r['name'] as String;
-      final country = r['country'] as String? ?? '';
+      final country = r['country_code'] ?? '';
       final admin = r['admin1'] as String?;
       final displayName = admin != null
           ? '$name, $admin, $country'
@@ -31,7 +31,7 @@ Future<List<CitySuggestion>> citySuggestions(Ref ref, String query) async {
       return CitySuggestion(
         displayName: displayName,
         city: name,
-        country: country, 
+        country: country,
         latitude: (r['latitude'] as num).toDouble(),
         longitude: (r['longitude'] as num).toDouble(),
       );

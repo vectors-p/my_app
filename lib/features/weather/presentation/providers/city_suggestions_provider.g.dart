@@ -66,7 +66,7 @@ final class CitySuggestionsProvider
   }
 }
 
-String _$citySuggestionsHash() => r'9566069eb9252f9d794cd5b3ea13ea4a8ea2a96f';
+String _$citySuggestionsHash() => r'b23ece564df1ca661ce00b9411b3a0586da59c09';
 
 final class CitySuggestionsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<CitySuggestion>>, String> {

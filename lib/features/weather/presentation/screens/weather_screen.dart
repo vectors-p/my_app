@@ -12,6 +12,7 @@ import 'package:my_app/shared/widgets/forecast_row.dart';
 import 'package:my_app/shared/widgets/glass_card.dart';
 import 'package:my_app/shared/widgets/glass_icon_button.dart';
 import 'package:my_app/shared/widgets/pill_button.dart';
+import 'package:my_app/shared/widgets/scrolling_text.dart';
 import 'package:my_app/shared/widgets/stat_item.dart';
 
 class WeatherScreen extends ConsumerWidget {
@@ -255,8 +256,8 @@ class _WeatherContent extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              Text(
-                weather.country.isNotEmpty
+              ScrollingText(
+                text: weather.country.isNotEmpty
                     ? '${weather.city}, ${weather.country}'
                     : weather.city,
                 style: AppTheme.cityName,
