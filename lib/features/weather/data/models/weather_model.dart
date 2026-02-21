@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_app/features/weather/data/models/daily_forecast.dart';
 
 part 'weather_model.freezed.dart';
 part 'weather_model.g.dart';
@@ -19,6 +20,7 @@ abstract class WeatherModel with _$WeatherModel {
     required int pressure,
     required bool isDay,
     required String time,
+    required List<DailyForecast> forecast,
   }) = _WeatherModel;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) =>

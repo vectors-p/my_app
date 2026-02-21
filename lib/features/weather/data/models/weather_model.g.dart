@@ -21,6 +21,9 @@ _WeatherModel _$WeatherModelFromJson(Map<String, dynamic> json) =>
       pressure: (json['pressure'] as num).toInt(),
       isDay: json['isDay'] as bool,
       time: json['time'] as String,
+      forecast: (json['forecast'] as List<dynamic>)
+          .map((e) => DailyForecast.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$WeatherModelToJson(_WeatherModel instance) =>
@@ -38,4 +41,5 @@ Map<String, dynamic> _$WeatherModelToJson(_WeatherModel instance) =>
       'pressure': instance.pressure,
       'isDay': instance.isDay,
       'time': instance.time,
+      'forecast': instance.forecast,
     };

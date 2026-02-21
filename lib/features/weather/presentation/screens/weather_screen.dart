@@ -8,6 +8,7 @@ import 'package:my_app/features/settings/presentation/providers/settings_provide
 import 'package:my_app/features/weather/data/models/weather_model.dart';
 import 'package:my_app/features/weather/presentation/providers/weather_provider.dart';
 import 'package:my_app/features/weather/presentation/utils/weather_theme.dart';
+import 'package:my_app/shared/widgets/forecast_row.dart';
 import 'package:my_app/shared/widgets/glass_card.dart';
 import 'package:my_app/shared/widgets/glass_icon_button.dart';
 import 'package:my_app/shared/widgets/pill_button.dart';
@@ -253,7 +254,7 @@ class _WeatherContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 24),
               Text(
                 weather.country.isNotEmpty
                     ? '${weather.city}, ${weather.country}'
@@ -269,7 +270,7 @@ class _WeatherContent extends StatelessWidget {
                   fontSize: 11,
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 24),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -287,16 +288,22 @@ class _WeatherContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(height: 34),
               Center(
                 child: Lottie.asset(
                   animationForCode(weather.weatherCode, weather.isDay),
-                  width: 200,
-                  height: 200,
+                  width: 150,
+                  height: 150,
                   fit: BoxFit.contain,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 34),
+              ForecastRow(
+                forecast: weather.forecast,
+                accent: accent,
+                isCelsius: isCelsius,
+              ),
+              const SizedBox(height: 16),
               GlassCard(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -332,7 +339,7 @@ class _WeatherContent extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 1),
             ],
           ),
         ),
