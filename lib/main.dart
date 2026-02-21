@@ -15,7 +15,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Weather App',
       routerConfig: router,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(useMaterial3: true, fontFamily: 'Inter'),
     );
   }
 }
