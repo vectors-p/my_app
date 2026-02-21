@@ -19,6 +19,4 @@ class Settings extends _$Settings {
     await prefs.setBool(_unitKey, !current);
     state = AsyncData(!current);
   }
-
-  bool get isCelsius => state.value ?? true;
 }

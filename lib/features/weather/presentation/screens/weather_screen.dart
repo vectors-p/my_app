@@ -54,10 +54,7 @@ class WeatherScreen extends ConsumerWidget {
               ),
             ),
             child: const Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.primaryBlue,
-                strokeWidth: 1.5,
-              ),
+              child: CircularProgressIndicator(color: AppTheme.primaryBlue),
             ),
           ),
           error: (e, _) => Container(
